@@ -139,7 +139,8 @@
     border: 1px solid var(--input-border);
     border-radius: 0;
     outline: none;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    animation: pulse 3s ease-in-out infinite;
     letter-spacing: 0.04em;
     text-align: center;
   }
@@ -152,6 +153,12 @@
 
   .search-wrap input:focus {
     border-color: var(--focus-border);
+    animation: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { border-color: var(--input-border); }
+    50% { border-color: var(--charcoal); }
   }
 
   /* Results area */
