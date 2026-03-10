@@ -116,7 +116,7 @@
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--light);
-    margin-bottom: 0.6rem;
+    margin-bottom: 2rem;
     text-align: center;
   }
 
@@ -429,13 +429,6 @@ var resultsEl = document.getElementById('results');
 
 function renderWelcome() {
   clear(resultsEl);
-  var wrap = el('div', 'welcome');
-  var p = el('p');
-  p.appendChild(document.createTextNode('Escribe tu nombre para'));
-  p.appendChild(document.createElement('br'));
-  p.appendChild(document.createTextNode('encontrar tu mesa'));
-  wrap.appendChild(p);
-  resultsEl.appendChild(wrap);
 }
 
 function renderNoMatch() {
