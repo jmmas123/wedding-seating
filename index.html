@@ -329,6 +329,80 @@
     line-height: 1.6;
   }
 
+  /* Intro overlay */
+  .intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: fadeIn 0.6s ease-out;
+    transition: opacity 0.5s ease-out;
+  }
+
+  .intro-overlay.hiding {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .intro-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(40px) saturate(1.4);
+    -webkit-backdrop-filter: blur(40px) saturate(1.4);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: clamp(16px, 3vw, 24px);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.06),
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    padding: clamp(3rem, 8vw, 5rem) clamp(2rem, 6vw, 3.5rem);
+    max-width: 560px;
+    width: 100%;
+    text-align: center;
+    animation: cardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+
+  .intro-card .intro-monogram {
+    width: clamp(90px, 18vw, 135px);
+    height: auto;
+    margin-bottom: clamp(1.2rem, 3vw, 2rem);
+  }
+
+  .intro-card .intro-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.2rem, 3.2vw, 1.65rem);
+    font-weight: 600;
+    font-style: italic;
+    color: var(--charcoal);
+    line-height: 1.7;
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .intro-card .intro-btn {
+    display: inline-block;
+    font-family: 'Cormorant SC', 'Cormorant Garamond', serif;
+    font-size: clamp(0.75rem, 2vw, 0.95rem);
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 0.7rem 2.5rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .intro-card .intro-btn:active {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
   /* Animations */
   @keyframes fadeIn {
     from { opacity: 0; }
@@ -344,6 +418,16 @@
 </style>
 </head>
 <body>
+
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-card">
+    <img class="intro-monogram" src="pi_je.jpeg" alt="JE">
+    <div class="intro-text">
+      Bienvenidos a la fiesta de nuestra boda! Les agradecemos, de todo coraz&oacute;n, por compartir este momento tan especial con nosotros. Esperamos, con enorme ilusi&oacute;n, que disfruten muchisimo!
+    </div>
+    <button class="intro-btn" id="introBtn">Encontrar mi mesa</button>
+  </div>
+</div>
 
 <div class="container">
   <img class="monogram" src="pi_je.jpeg" alt="JE">
@@ -512,8 +596,16 @@ input.addEventListener('keydown', function(e) {
 
 renderWelcome();
 
-window.addEventListener('load', function() {
-  setTimeout(function() { input.focus(); }, 300);
+// Intro overlay dismiss
+var overlay = document.getElementById('introOverlay');
+var introBtn = document.getElementById('introBtn');
+
+introBtn.addEventListener('click', function() {
+  overlay.classList.add('hiding');
+  setTimeout(function() {
+    overlay.style.display = 'none';
+    input.focus();
+  }, 500);
 });
 </script>
 </body>
