@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Erika & Josemaría — Find Your Table</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cormorant+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #1a1a1a;
+    --charcoal: #333;
+    --medium: #666;
+    --light: #999;
+    --rule: #ccc;
+    --bg: #fff;
+    --input-bg: #fafafa;
+    --input-border: #ddd;
+    --focus-border: #999;
+    --highlight: #1a1a1a;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    background: var(--bg);
+    color: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100dvh;
+    -webkit-overflow-scrolling: touch;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 440px;
+    padding: 2.5rem 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100dvh;
+  }
+
+  /* Monogram */
+  .monogram {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 3rem;
+    color: var(--black);
+    margin-bottom: 1.2rem;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant SC', 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 0.85rem;
+    color: var(--charcoal);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    line-height: 1.8;
+  }
+
+  .header .names {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.6rem;
+    color: var(--black);
+    letter-spacing: 0.2em;
+    margin-top: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .header .names .amp {
+    font-style: italic;
+    font-size: 1.3rem;
+    letter-spacing: 0;
+    display: block;
+    margin: 0.1rem 0;
+    font-weight: 300;
+  }
+
+  .rule {
+    width: 60px;
+    height: 1px;
+    background: var(--rule);
+    margin: 1rem auto;
+  }
+
+  .header .date {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 0.9rem;
+    color: var(--medium);
+    letter-spacing: 0.25em;
+  }
+
+  /* Search instruction */
+  .search-label {
+    font-family: 'Cormorant SC', 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--light);
+    margin-bottom: 0.6rem;
+    text-align: center;
+  }
+
+  /* Search */
+  .search-wrap {
+    width: 100%;
+    position: relative;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.8s ease-out 0.2s both;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--black);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 0;
+    outline: none;
+    transition: border-color 0.3s;
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+
+  .search-wrap input::placeholder {
+    color: var(--light);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .search-wrap input:focus {
+    border-color: var(--focus-border);
+  }
+
+  /* Results area */
+  .results {
+    width: 100%;
+    flex: 1;
+  }
+
+  /* Welcome state */
+  .welcome {
+    text-align: center;
+    padding: 1.5rem 0;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .welcome p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--light);
+    line-height: 1.6;
+  }
+
+  /* Match card */
+  .match-card {
+    text-align: center;
+    animation: cardReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    padding: 1rem 0;
+  }
+
+  @keyframes cardReveal {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .match-card .guest-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--black);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+
+  .match-card .table-number {
+    font-family: 'Cormorant SC', 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 0.8rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--medium);
+    margin-bottom: 0.3rem;
+  }
+
+  .match-card .table-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--black);
+    line-height: 1.1;
+    margin-bottom: 0.2rem;
+  }
+
+  .match-card .card-rule {
+    width: 40px;
+    height: 1px;
+    background: var(--rule);
+    margin: 1rem auto;
+  }
+
+  .match-card .tablemates-label {
+    font-family: 'Cormorant SC', 'Cormorant Garamond', serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--light);
+    margin-bottom: 0.8rem;
+  }
+
+  .match-card .tablemates {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.15rem 0;
+  }
+
+  .match-card .tablemate {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: var(--medium);
+    line-height: 1.7;
+  }
+
+  .match-card .tablemate::after {
+    content: '\00a0\00a0\00b7\00a0\00a0';
+    color: var(--rule);
+  }
+
+  .match-card .tablemate:last-child::after {
+    content: '';
+  }
+
+  /* Multiple results */
+  .multi-results {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .multi-result-item {
+    padding: 0.9rem 0.2rem;
+    border-bottom: 1px solid var(--input-border);
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: cardReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .multi-result-item:last-child {
+    border-bottom: none;
+  }
+
+  .multi-result-item:nth-child(2) { animation-delay: 0.05s; }
+  .multi-result-item:nth-child(3) { animation-delay: 0.1s; }
+  .multi-result-item:nth-child(4) { animation-delay: 0.15s; }
+  .multi-result-item:nth-child(5) { animation-delay: 0.2s; }
+
+  .multi-result-item:active {
+    background: var(--input-bg);
+  }
+
+  .multi-result-item .name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--black);
+    letter-spacing: 0.04em;
+  }
+
+  .multi-result-item .table-num {
+    font-family: 'Cormorant SC', 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--light);
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  /* No match */
+  .no-match {
+    text-align: center;
+    padding: 1.5rem 0;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .no-match p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--light);
+    line-height: 1.6;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Responsive */
+  @media (min-height: 750px) {
+    .container { padding-top: 3.5rem; }
+    .monogram { font-size: 3.5rem; }
+  }
+
+  @media (max-height: 600px) {
+    .container { padding-top: 1.2rem; }
+    .monogram { font-size: 2.5rem; margin-bottom: 0.6rem; }
+    .header { margin-bottom: 1.2rem; }
+    .header .names { font-size: 1.3rem; }
+  }
+
+  /* Desktop hover */
+  @media (min-width: 600px) {
+    .multi-result-item:hover {
+      background: var(--input-bg);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="monogram">JE</div>
+
+  <header class="header">
+    <h1>Bienvenidos a<br>nuestra boda</h1>
+    <div class="names">
+      Erika
+      <span class="amp">&amp;</span>
+      Josemaría
+    </div>
+    <div class="rule"></div>
+    <div class="date">03 &middot; 14 &middot; 26</div>
+  </header>
+
+  <div class="search-label">Encuentra tu mesa</div>
+
+  <div class="search-wrap">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Escribe tu nombre..."
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+    >
+  </div>
+
+  <div class="results" id="results"></div>
+</div>
+
+<script>
+var TABLES = {
+  3: ["Krissia de Sánchez","Jorge Sánchez","Karina Reyes","Doris Rivas","Metzy DeHanis","Jerry DeHanis","Laura de Cruz","Ily de Simon","Hans Simon"],
+  6: ["Mónica Mas","Sofía Mas","Lucía Molina","Max Esclasans","Lia Esclasans"],
+  7: ["Jaime Burgos","Ana Luisa Martínez","Mariella Burgos","Jimena Rivas","César Pérez","Valeria Castaneda","Cristina Rivas","Andrés Lacayo","Ximena Sánchez","Pablo Sánchez","Monica Contreras","Alejandra Wahn"],
+  8: ["Ana María de Lucha","Luis Lucha","Verónica Navas","Sergio Ovieda","Carolina de Urquilla","Carlos Urquilla","Ana Alvayero","Walter Wahn","Julio Zepeda","Suyapa de Zepeda"],
+  9: ["Blanca Ochoa","Lucy Romero","Isabel Romero","Roberto Figueroa","Jacky de Figueroa","Valeria Zepeda","Ernesto Pacas","José Manuel Avelar","Sofía Pacas","María Fernanda Luna","Fernando Pacas","Blanquita de Pacas"],
+  10: ["Fiorella Bardi","Paola Alvarenga","Ana Raquel Zaldaña","Diego Villalta","Natalia Gómez","Valeria Moncada","Walter Solórzano","Juan Pablo Meza","Josemaría Mas","Erika Z. Mas","Valeria I. Membreño","Alejandro Membreño","Gerardo Bolaños","Camila Valiente"],
+  11: ["Roberto Moreira","Renata Mirón","Guido Lobo","Juan Diego Telles","Diego Castro","Gabriela Daboub","Adriana Parker","Rodrigo Avilés","Nicole Suvillaga","José Peña","Bruna Rivetti","Kevin Rivera"],
+  13: ["Andrea Güémez","Gabriel Flores","William García","Armando Rivera","Merary de Granadeño","Jonathan Granadeño","Mónica Cuéllar","Brian Padilla","Jacqueline de Sierra","Gustavo Sierra","Lucy Duarte","Ana María Duarte","Eduardo Zepeda","Dennis Chacón"],
+  14: ["Andrés Merino","Marco Munguía","Andrea Romero","Steven Kawas","Andrea Chávez","Mauricio Franco","Gustavo Martínez","Paola Duque","Luciana Urquilla","Gabriela Garay","Henry Anderson","Mariana Funes"]
+};
+
+var guests = [];
+for (var table in TABLES) {
+  if (TABLES.hasOwnProperty(table)) {
+    var names = TABLES[table];
+    for (var i = 0; i < names.length; i++) {
+      guests.push({ name: names[i], table: parseInt(table) });
+    }
+  }
+}
+
+function normalize(str) {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function search(query) {
+  var q = normalize(query).trim();
+  if (!q) return [];
+  var words = q.split(/\s+/);
+  return guests.filter(function(g) {
+    var n = normalize(g.name);
+    return words.every(function(w) { return n.includes(w); });
+  });
+}
+
+function el(tag, className, text) {
+  var e = document.createElement(tag);
+  if (className) e.className = className;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function clear(node) {
+  while (node.firstChild) node.removeChild(node.firstChild);
+}
+
+var input = document.getElementById('searchInput');
+var resultsEl = document.getElementById('results');
+
+function renderWelcome() {
+  clear(resultsEl);
+  var wrap = el('div', 'welcome');
+  var p = el('p');
+  p.appendChild(document.createTextNode('Escribe tu nombre para'));
+  p.appendChild(document.createElement('br'));
+  p.appendChild(document.createTextNode('encontrar tu mesa'));
+  wrap.appendChild(p);
+  resultsEl.appendChild(wrap);
+}
+
+function renderNoMatch() {
+  clear(resultsEl);
+  var wrap = el('div', 'no-match');
+  var p = el('p');
+  p.appendChild(document.createTextNode('No encontramos ese nombre.'));
+  p.appendChild(document.createElement('br'));
+  p.appendChild(document.createTextNode('\u00bfIntentas con otra escritura?'));
+  wrap.appendChild(p);
+  resultsEl.appendChild(wrap);
+}
+
+function renderSingleMatch(guest) {
+  clear(resultsEl);
+  var card = el('div', 'match-card');
+  card.appendChild(el('div', 'guest-name', guest.name));
+  card.appendChild(el('div', 'table-number', 'Mesa'));
+  card.appendChild(el('div', 'table-value', String(guest.table)));
+  card.appendChild(el('div', 'card-rule'));
+  card.appendChild(el('div', 'tablemates-label', 'Te sientas con'));
+
+  var tmWrap = el('div', 'tablemates');
+  var tablemates = TABLES[guest.table].filter(function(n) { return n !== guest.name; });
+  tablemates.forEach(function(name) {
+    tmWrap.appendChild(el('span', 'tablemate', name));
+  });
+  card.appendChild(tmWrap);
+  resultsEl.appendChild(card);
+}
+
+function renderMultipleMatches(matches) {
+  clear(resultsEl);
+
+  if (matches.length <= 5) {
+    var wrap = el('div', 'multi-results');
+    matches.forEach(function(g) {
+      var item = el('div', 'multi-result-item');
+      item.appendChild(el('span', 'name', g.name));
+      item.appendChild(el('span', 'table-num', 'Mesa ' + g.table));
+      item.addEventListener('click', function() {
+        renderSingleMatch(g);
+      });
+      wrap.appendChild(item);
+    });
+    resultsEl.appendChild(wrap);
+  } else {
+    var wrap2 = el('div', 'no-match');
+    var p = el('p');
+    p.appendChild(document.createTextNode('Varios resultados.'));
+    p.appendChild(document.createElement('br'));
+    p.appendChild(document.createTextNode('Sigue escribiendo\u2026'));
+    wrap2.appendChild(p);
+    resultsEl.appendChild(wrap2);
+  }
+}
+
+function handleSearch() {
+  var query = input.value;
+  if (!query.trim()) {
+    renderWelcome();
+    return;
+  }
+  var matches = search(query);
+  if (matches.length === 0) {
+    renderNoMatch();
+  } else if (matches.length === 1) {
+    renderSingleMatch(matches[0]);
+  } else {
+    renderMultipleMatches(matches);
+  }
+}
+
+input.addEventListener('input', handleSearch);
+input.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    handleSearch();
+    input.blur();
+  }
+});
+
+renderWelcome();
+
+window.addEventListener('load', function() {
+  setTimeout(function() { input.focus(); }, 300);
+});
+</script>
+</body>
+</html>
