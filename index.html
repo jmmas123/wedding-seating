@@ -153,6 +153,9 @@
 
   .search-wrap input:focus {
     border-color: var(--focus-border);
+  }
+
+  .search-wrap input.has-input {
     animation: none;
   }
 
@@ -578,6 +581,11 @@ function renderMultipleMatches(matches) {
 
 function handleSearch() {
   var query = input.value;
+  if (query.trim()) {
+    input.classList.add('has-input');
+  } else {
+    input.classList.remove('has-input');
+  }
   if (!query.trim()) {
     renderWelcome();
     return;
